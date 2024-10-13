@@ -35,17 +35,15 @@ def pdf_to_text(pdf_path):
         text += f"Page {page_num}:\n{page_text}\n\n"   
     return text
 
-def pdf_to_text_low_memory(pdf_path):
+def pdf_to_text_low_memory(pdf_path, dpi=150):
     text = ""
-    # Get the total number of pages
     from pdf2image import pdfinfo_from_path
     info = pdfinfo_from_path(pdf_path)
     total_pages = info["Pages"]
-    # Process each page individually
     for page_num in range(1, total_pages + 1):
         pages = convert_from_path(
             pdf_path,
-            dpi=150,  # Reduced DPI
+            dpi=dpi,
             first_page=page_num,
             last_page=page_num
         )
@@ -57,7 +55,7 @@ def pdf_to_text_low_memory(pdf_path):
     return text
 
 def process_dir(dir, target="cleaned_tests", low_memory=True):
-    for pdf in os.listdir({dir}):
+    for pdf in os.listdir(f"{dir}"):
         with open(f"{target}/{os.path.splitext(pdf)[0]}.txt", 'w', encoding='utf-8') as file:
             if low_memory:
                 file.write(pdf_to_text_low_memory(f"{dir}/{pdf}"))

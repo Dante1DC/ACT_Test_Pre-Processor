@@ -44,7 +44,6 @@ def questions_from_file(file):
         for choice_line in block[3:]:
             if not choice_line.strip():
                 continue
-            # Check if the line starts with 'T ' or 'F '
             if choice_line.startswith('T '):
                 is_correct = True
                 choice_text = choice_line[2:].strip()
@@ -54,7 +53,6 @@ def questions_from_file(file):
             else:
                 print(f"Invalid choice format in block {block_num}: '{choice_line}'")
                 continue
-            # Create an instance of the composite type
             choice_instance = (choice_id, choice_text, is_correct)
             choices.append(choice_instance)
             choice_id += 1
@@ -63,7 +61,6 @@ def questions_from_file(file):
             print(f"No valid choices found in block {block_num}, skipping.")
             continue
 
-        # Now, insert the data
         cur.execute('''INSERT INTO Question (category, reference_text, question_text, choices) VALUES (%s, %s, %s, %s::choice_type[])''',
                     (category, reference_text, question_text, choices))
     conn.commit()
@@ -73,5 +70,5 @@ def questions_from_file(file):
 
 def questions_from_dir(dir):
     print(os.listdir(f"{dir}"))
-    for txt in os.listdir({dir}):
+    for txt in os.listdir(f"{dir}"):
         questions_from_file(f"{dir}/{txt}")
