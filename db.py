@@ -60,7 +60,11 @@ def questions_from_file(file):
         if not choices:
             print(f"No valid choices found in block {block_num}, skipping.")
             continue
-
+        
+        print(category)
+        print(reference_text)
+        print(question_text)
+        print(choices)
         cur.execute('''INSERT INTO Question (category, reference_text, question_text, choices) VALUES (%s, %s, %s, %s::choice_type[])''',
                     (category, reference_text, question_text, choices))
     conn.commit()
